@@ -21,6 +21,7 @@ function RegistrationForm() {
     profession: "",
     linkedin_url: "",
     github_url: "",
+    role: "STUDENT",
   });
 
   const handleChange = (e) => {
@@ -166,33 +167,59 @@ function RegistrationForm() {
               </div>
 
               {/* Professional Details */}
-              <div className="space-y-6">
-                <h3 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">
-                  Professional Details
-                </h3>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <InputField
-                    id="location"
-                    name="location"
-                    value={formData.location}
-                    onChange={handleChange}
-                    icon={<MapPin className="h-5 w-5 text-gray-400" />}
-                    label="Location"
-                    placeholder="Enter your location"
-                  />
+<div className="space-y-6">
+  <h3 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">
+    Professional Details
+  </h3>
 
-                  <InputField
-                    id="profession"
-                    name="profession"
-                    value={formData.profession}
-                    onChange={handleChange}
-                    icon={<Briefcase className="h-5 w-5 text-gray-400" />}
-                    label="Profession"
-                    placeholder="Enter your profession"
-                  />
-                </div>
-              </div>
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
+    {/* Location */}
+    <InputField
+      id="location"
+      name="location"
+      value={formData.location}
+      onChange={handleChange}
+      icon={<MapPin className="h-5 w-5 text-gray-400" />}
+      label="Location"
+      placeholder="Enter your location"
+    />
+
+    {/* Profession */}
+    <InputField
+      id="profession"
+      name="profession"
+      value={formData.profession}
+      onChange={handleChange}
+      icon={<Briefcase className="h-5 w-5 text-gray-400" />}
+      label="Profession"
+      placeholder="Enter your profession"
+    />
+
+    {/* Role */}
+    <div className="space-y-2">
+      <label
+        htmlFor="role"
+        className="block font-semibold bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent"
+      >
+        Role
+      </label>
+
+      <select
+        id="role"
+        name="role"
+        value={formData.role}
+        onChange={handleChange}
+        className="block w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
+      >
+        <option value="STUDENT">Student</option>
+<option value="TEACHER">Teacher</option>
+<option value="ADMIN">Admin</option>
+      </select>
+    </div>
+
+  </div>
+</div>
               {/* Social Links */}
               <div className="space-y-6">
                 <h3 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">

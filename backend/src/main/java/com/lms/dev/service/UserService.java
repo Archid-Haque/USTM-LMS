@@ -29,18 +29,26 @@ public class UserService {
 
     public User createUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        // Set default role if not provided
+        if (user.getRole() == null || user.getRole().isEmpty()) {
+            user.setRole("student");
+        }
+
         return userRepository.save(user);
     }
 
     public void updateUserProfile(MultipartFile file, UUID id) throws IOException {
         User user = getUserById(id);
         if (user == null) return;
+
         user.setProfileImage(file.getBytes());
         userRepository.save(user);
     }
 
     public User updateUser(UUID id, User updatedUser) {
         User existingUser = userRepository.findById(id).orElse(null);
+
         if (existingUser != null) {
             existingUser.setUsername(updatedUser.getUsername());
             existingUser.setEmail(updatedUser.getEmail());
@@ -51,15 +59,20 @@ public class UserService {
             existingUser.setProfession(updatedUser.getProfession());
             existingUser.setLinkedin_url(updatedUser.getLinkedin_url());
             existingUser.setGithub_url(updatedUser.getGithub_url());
+
+            // Update role
+            existingUser.setRole(updatedUser.getRole());
+
             return userRepository.save(existingUser);
         }
+
         return null;
     }
-    
+
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
-    
+
     public User authenticateUser(String email, String password) {
         return userRepository.findByEmailAndPassword(email, password);
     }
