@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/ustm-logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,6 +14,23 @@ function Navbar(props) {
   );
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const handleLogOut = async () => {
     await authService.logout();
@@ -30,11 +47,17 @@ function Navbar(props) {
 
   return (
     <div>
-      <nav className="fixed top-0 left-0 w-full bg-[#002147] flex justify-between items-center px-[4vw] py-2 z-[999]">
-
+      <nav
+        className={`fixed top-0 left-0 w-full flex justify-between items-center px-[4vw] py-2 z-[999] transition-all duration-500 ${
+          value === "home"
+            ? scrolled
+              ? "bg-[#002147] shadow-lg"
+              : "bg-transparent backdrop-blur-md"
+            : "bg-[#002147] shadow-lg"
+        }`}
+      >
         {/* Logo Section */}
         <div className="flex items-center gap-4">
-
           <img
             src={logo}
             alt="USTM Logo"
@@ -54,7 +77,6 @@ function Navbar(props) {
 
         {/* Navigation */}
         <div className="flex">
-
           <div id="menu-btn" className="hidden">
             <div
               className="menu-dash text-white"
@@ -75,7 +97,6 @@ function Navbar(props) {
               isMobileMenuOpen ? "active" : ""
             }`}
           >
-
             {isMobileMenuOpen && (
               <li className="close-button">
                 <button onClick={closeMobileMenu}>X</button>
@@ -165,7 +186,6 @@ function Navbar(props) {
                 </button>
               )}
             </li>
-
           </ul>
         </div>
       </nav>
