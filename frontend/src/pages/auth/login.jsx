@@ -26,8 +26,25 @@ function Login() {
       if (result.success) {
         if (result.user) {
           setUser(result.user);
+
+          // Debugging
+          console.log("Logged in user:", result.user);
+
+          const role = result.user.role;
+
+          if (role === "ADMIN" || role === "ROLE_ADMIN") {
+            navigate("/admin");
+          } else if (
+            role === "TEACHER" ||
+            role === "ROLE_TEACHER"
+          ) {
+            navigate("/teacher");
+          } else {
+            navigate("/courses");
+          }
+        } else {
+          navigate("/courses");
         }
-        navigate("/courses");
       } else {
         setError(result.error || "Login failed. Please try again.");
       }
@@ -39,7 +56,6 @@ function Login() {
     }
   };
 
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       <Navbar />
@@ -49,8 +65,12 @@ function Login() {
             <div className="mx-auto h-14 w-14 bg-gradient-primary rounded-full flex items-center justify-center mb-4 shadow-lg">
               <LogIn className="h-8 w-8 text-white" />
             </div>
-            <h2 className="text-4xl font-bold text-gray-900 mb-2">Welcome Back!</h2>
-            <p className="text-gray-600">Sign in to your account to continue</p>
+            <h2 className="text-4xl font-bold text-gray-900 mb-2">
+              Welcome Back!
+            </h2>
+            <p className="text-gray-600">
+              Sign in to your account to continue
+            </p>
           </div>
 
           <div className="bg-white shadow-2xl rounded-2xl p-8 border border-gray-100">
@@ -97,10 +117,11 @@ function Login() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className={`w-full py-4 px-6 rounded-lg font-semibold text-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-blue-300 ${isLoading
-                  ? "bg-gray-400 text-gray-200 cursor-not-allowed"
-                  : "bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700"
-                  }`}
+                className={`w-full py-4 px-6 rounded-lg font-semibold text-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-blue-300 ${
+                  isLoading
+                    ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+                    : "bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700"
+                }`}
               >
                 {isLoading ? (
                   <div className="flex items-center justify-center">
@@ -138,7 +159,9 @@ function Login() {
                   <div className="w-full border-t border-gray-300" />
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-4 bg-white text-gray-500">New to our platform?</span>
+                  <span className="px-4 bg-white text-gray-500">
+                    New to our platform?
+                  </span>
                 </div>
               </div>
 
@@ -159,9 +182,19 @@ function Login() {
           <div className="text-center">
             <p className="text-sm text-gray-500">
               By signing in, you agree to our{" "}
-              <a href="#" className="text-blue-600 hover:text-blue-700 transition-colors">Terms of Service</a>
-              {" "}and{" "}
-              <a href="#" className="text-blue-600 hover:text-blue-700 transition-colors">Privacy Policy</a>
+              <a
+                href="#"
+                className="text-blue-600 hover:text-blue-700 transition-colors"
+              >
+                Terms of Service
+              </a>{" "}
+              and{" "}
+              <a
+                href="#"
+                className="text-blue-600 hover:text-blue-700 transition-colors"
+              >
+                Privacy Policy
+              </a>
             </p>
           </div>
         </div>
