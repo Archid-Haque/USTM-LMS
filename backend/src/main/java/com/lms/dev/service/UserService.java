@@ -1,11 +1,11 @@
 package com.lms.dev.service;
 
+import com.lms.dev.entity.User;
+import com.lms.dev.enums.UserRole;
+import com.lms.dev.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import com.lms.dev.entity.User;
-import com.lms.dev.repository.UserRepository;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -28,28 +28,36 @@ public class UserService {
     }
 
     public User createUser(User user) {
+
+        // Encrypt password before saving
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         // Set default role if not provided
-        if (user.getRole() == null || user.getRole().isEmpty()) {
-            user.setRole("student");
+        if (user.getRole() == null) {
+            user.setRole(UserRole.STUDENT);
         }
 
         return userRepository.save(user);
     }
 
     public void updateUserProfile(MultipartFile file, UUID id) throws IOException {
+
         User user = getUserById(id);
-        if (user == null) return;
+
+        if (user == null) {
+            return;
+        }
 
         user.setProfileImage(file.getBytes());
         userRepository.save(user);
     }
 
     public User updateUser(UUID id, User updatedUser) {
+
         User existingUser = userRepository.findById(id).orElse(null);
 
         if (existingUser != null) {
+
             existingUser.setUsername(updatedUser.getUsername());
             existingUser.setEmail(updatedUser.getEmail());
             existingUser.setDob(updatedUser.getDob());
@@ -61,7 +69,9 @@ public class UserService {
             existingUser.setGithub_url(updatedUser.getGithub_url());
 
             // Update role
-            existingUser.setRole(updatedUser.getRole());
+            if (updatedUser.getRole() != null) {
+                existingUser.setRole(updatedUser.getRole());
+            }
 
             return userRepository.save(existingUser);
         }

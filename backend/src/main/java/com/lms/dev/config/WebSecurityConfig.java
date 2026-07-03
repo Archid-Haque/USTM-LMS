@@ -11,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -31,7 +32,8 @@ public class WebSecurityConfig {
     private final JwtAuthTokenFilter jwtAuthTokenFilter;
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
 
@@ -42,47 +44,87 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
+
+        http
+                .csrf(csrf -> csrf.disable())
                 .cors(cors -> {})
-                .exceptionHandling(eh -> eh.authenticationEntryPoint(unauthorizedHandler))
-                .sessionManagement(sm -> sm.sessionCreationPolicy(org.springframework.security.config.http.SessionCreationPolicy.STATELESS))
+                .exceptionHandling(exception ->
+                        exception.authenticationEntryPoint(unauthorizedHandler))
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
                 .authorizeHttpRequests(auth -> auth
+
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        // Public endpoints
+
+                        // Public APIs
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/error").permitAll()
 
-                        // Courses
+                        // Public course viewing
                         .requestMatchers(HttpMethod.GET, "/api/courses/**").permitAll()
 
+                        // Admin only course management
                         .requestMatchers(HttpMethod.POST, "/api/courses/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/courses/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/courses/**").hasRole("ADMIN")
 
-                        // Assessments, Enrollments, Feedback, Learning, Progress
-                        .requestMatchers("/api/assessments/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/api/enrollments/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/api/feedbacks/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/api/learning/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/api/progress/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/api/questions/**").hasAnyRole("USER", "ADMIN")
+                        // Student / Teacher / Admin access
+                        .requestMatchers("/api/assessments/**")
+                        .hasAnyRole("STUDENT", "TEACHER", "ADMIN")
+
+                        .requestMatchers("/api/enrollments/**")
+                        .hasAnyRole("STUDENT", "TEACHER", "ADMIN")
+
+                        .requestMatchers("/api/feedbacks/**")
+                        .hasAnyRole("STUDENT", "TEACHER", "ADMIN")
+
+                        .requestMatchers("/api/learning/**")
+                        .hasAnyRole("STUDENT", "TEACHER", "ADMIN")
+
+                        .requestMatchers("/api/progress/**")
+                        .hasAnyRole("STUDENT", "TEACHER", "ADMIN")
+
+                        .requestMatchers("/api/questions/**")
+                        .hasAnyRole("STUDENT", "TEACHER", "ADMIN")
 
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(jwtAuthTokenFilter, UsernamePasswordAuthenticationFilter.class);
+
+                .addFilterBefore(jwtAuthTokenFilter,
+                        UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://127.0.0.1:3000"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:3000",
+                "http://127.0.0.1:3000"
+        ));
+
+        configuration.setAllowedMethods(List.of(
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "PATCH",
+                "OPTIONS"
+        ));
+
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+
         source.registerCorsConfiguration("/**", configuration);
+
         return source;
     }
 }

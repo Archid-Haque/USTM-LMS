@@ -1,4 +1,5 @@
 package com.lms.dev.entity;
+
 import com.lms.dev.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,19 +15,30 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "users",
+@Table(
+        name = "users",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "email")
-        })
+        }
+)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class User {
+
     @Id
     @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "BINARY(16)")
+    @GenericGenerator(
+            name = "uuid2",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(
+            name = "id",
+            updatable = false,
+            nullable = false,
+            columnDefinition = "BINARY(16)"
+    )
     private UUID id;
 
     @Column(nullable = false)
@@ -42,7 +54,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private UserRole role = UserRole.USER;
+    private UserRole role = UserRole.STUDENT;
 
     @Column(name = "is_active")
     private Boolean isActive = true;
@@ -58,6 +70,7 @@ public class User {
     private String linkedin_url;
 
     private String github_url;
+
     @Lob
     @Column(columnDefinition = "LONGBLOB")
     private byte[] profileImage;
@@ -84,4 +97,3 @@ public class User {
         updatedAt = LocalDateTime.now();
     }
 }
-

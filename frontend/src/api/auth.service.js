@@ -63,13 +63,15 @@ async function register(formData) {
       };
     } else {
       const data = await response.json();
+
       return {
         success: false,
-        error: data.error || "Registration failed",
+        error: data.message || data.error || "Registration failed",
       };
     }
   } catch (error) {
     console.error("Registration error:", error);
+
     return {
       success: false,
       error: "Network error. Please try again.",
@@ -91,12 +93,14 @@ async function getUserDetails(email) {
 
     if (response.ok) {
       const data = await response.json();
+
       return {
         success: true,
         data,
       };
     } else {
       const errorData = await response.json();
+
       return {
         success: false,
         error: errorData.error || "Failed to fetch user details",
@@ -104,6 +108,7 @@ async function getUserDetails(email) {
     }
   } catch (error) {
     console.error("Get user details error:", error);
+
     return {
       success: false,
       error: "Network error. Please try again.",
@@ -123,21 +128,34 @@ async function logout() {
     if (response.ok) {
       console.log("Backend logout successful");
     }
-
   } catch (error) {
     console.error("Logout error:", error);
   } finally {
-    localStorage.clear()
+    localStorage.clear();
     window.location.href = "/login";
   }
 }
 
+// ADMIN authentication
 function isAdminAuthenticated() {
-  return !!localStorage.getItem("token") && localStorage.getItem("role") === "ROLE_ADMIN";
+  return (
+    !!localStorage.getItem("token") &&
+    localStorage.getItem("role") === "ROLE_ADMIN"
+  );
 }
 
-function isUserAuthenticated(){
-  return !!localStorage.getItem("token") && localStorage.getItem("role") === "ROLE_USER";
+// Any logged-in user authentication
+function isUserAuthenticated() {
+  const role = localStorage.getItem("role");
+
+  return (
+    !!localStorage.getItem("token") &&
+    (
+      role === "ROLE_STUDENT" ||
+      role === "ROLE_TEACHER" ||
+      role === "ROLE_ADMIN"
+    )
+  );
 }
 
 function getCurrentUser() {
@@ -152,7 +170,10 @@ function getCurrentUser() {
 
 function getAuthHeader() {
   const token = localStorage.getItem("token");
-  return token ? { Authorization: `Bearer ${token}` } : {};
+
+  return token
+    ? { Authorization: `Bearer ${token}` }
+    : {};
 }
 
 export const authService = {
