@@ -17,8 +17,9 @@ import Performance from './pages/profile/Performance';
 import certificate from './pages/assessment/certificate';
 import Forum from './pages/course/forum';
 
-// Admin Dashboard Import
+// Admin Pages
 import AdminDashboard from './pages/admin/AdminDashboard';
+import StudentsPage from './pages/admin/StudentsPage';
 
 function App() {
   return (
@@ -28,11 +29,15 @@ function App() {
 
           <Route path="/addquestions/:id" element={<AddQuestions />} />
 
-          {/* Admin Dashboard */}
+          {/* Admin Routes */}
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/students" element={<StudentsPage />} />
 
+          {/* Authentication */}
           <Route path="/login" Component={Login}></Route>
           <Route path="/register" Component={Register}></Route>
+
+          {/* User Routes */}
           <Route path="/" Component={Home}></Route>
           <Route path="/courses" Component={Courses}></Route>
           <Route path="/course/:id" Component={Course}></Route>
@@ -44,6 +49,8 @@ function App() {
           <Route path="/Dcourses" Component={DCourses}></Route>
           <Route path="/Dusers" Component={DUsers}></Route>
           <Route path="/Performance" Component={Performance} />
+
+          {/* Error */}
           <Route path="*" Component={ErrorPage}></Route>
 
         </Routes>
