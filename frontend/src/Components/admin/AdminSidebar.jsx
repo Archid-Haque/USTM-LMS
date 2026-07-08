@@ -57,7 +57,7 @@ const AdminSidebar = () => {
         width: "260px",
         height: "100vh",
         background: "#002B5B",
-        color: "#fff",
+        color: "#ffffff",
         position: "fixed",
         left: 0,
         top: 0,
@@ -65,16 +65,19 @@ const AdminSidebar = () => {
         boxSizing: "border-box",
       }}
     >
+      {/* Logo */}
       <h2
         style={{
           textAlign: "center",
           marginBottom: "45px",
           fontWeight: "700",
+          letterSpacing: "1px",
         }}
       >
         USTM LMS
       </h2>
 
+      {/* Sidebar Menu */}
       {menuItems.map((item) => (
         <Link
           key={item.name}
@@ -92,6 +95,7 @@ const AdminSidebar = () => {
               marginBottom: "10px",
               borderRadius: "12px",
               cursor: "pointer",
+              transition: "all 0.3s ease",
               background:
                 location.pathname === item.path
                   ? "#F4B400"
@@ -100,7 +104,6 @@ const AdminSidebar = () => {
                 location.pathname === item.path
                   ? "#002B5B"
                   : "#ffffff",
-              transition: "0.3s",
               fontWeight: "600",
             }}
           >

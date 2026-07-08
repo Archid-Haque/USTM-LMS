@@ -17,9 +17,16 @@ import Performance from './pages/profile/Performance';
 import certificate from './pages/assessment/certificate';
 import Forum from './pages/course/forum';
 
+// =======================
 // Admin Pages
+// =======================
 import AdminDashboard from './pages/admin/AdminDashboard';
 import StudentsPage from './pages/admin/StudentsPage';
+import TeachersPage from './pages/admin/TeachersPage';
+import CoursesPage from './pages/admin/CoursesPage';
+import AssignmentsPage from './pages/admin/AssignmentsPage';
+import ReportsPage from './pages/admin/ReportsPage';
+import SettingsPage from './pages/admin/SettingsPage';
 
 function App() {
   return (
@@ -27,31 +34,45 @@ function App() {
       <BrowserRouter>
         <Routes>
 
+          {/* Dashboard */}
           <Route path="/addquestions/:id" element={<AddQuestions />} />
 
-          {/* Admin Routes */}
+          {/* =======================
+              ADMIN ROUTES
+          ======================== */}
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/students" element={<StudentsPage />} />
+          <Route path="/admin/teachers" element={<TeachersPage />} />
+          <Route path="/admin/courses" element={<CoursesPage />} />
+          <Route path="/admin/assignments" element={<AssignmentsPage />} />
+          <Route path="/admin/reports" element={<ReportsPage />} />
+          <Route path="/admin/settings" element={<SettingsPage />} />
 
-          {/* Authentication */}
-          <Route path="/login" Component={Login}></Route>
-          <Route path="/register" Component={Register}></Route>
+          {/* =======================
+              AUTHENTICATION
+          ======================== */}
+          <Route path="/login" Component={Login} />
+          <Route path="/register" Component={Register} />
 
-          {/* User Routes */}
-          <Route path="/" Component={Home}></Route>
-          <Route path="/courses" Component={Courses}></Route>
-          <Route path="/course/:id" Component={Course}></Route>
-          <Route path="/discussion/:id" Component={Forum}></Route>
-          <Route path="/certificate/:courseId" Component={certificate}></Route>
-          <Route path="/assessment/:id" Component={Assessment}></Route>
-          <Route path="/profile" Component={Profile}></Route>
-          <Route path="/Learnings" Component={Learnings}></Route>
-          <Route path="/Dcourses" Component={DCourses}></Route>
-          <Route path="/Dusers" Component={DUsers}></Route>
+          {/* =======================
+              USER ROUTES
+          ======================== */}
+          <Route path="/" Component={Home} />
+          <Route path="/courses" Component={Courses} />
+          <Route path="/course/:id" Component={Course} />
+          <Route path="/discussion/:id" Component={Forum} />
+          <Route path="/certificate/:courseId" Component={certificate} />
+          <Route path="/assessment/:id" Component={Assessment} />
+          <Route path="/profile" Component={Profile} />
+          <Route path="/Learnings" Component={Learnings} />
+          <Route path="/Dcourses" Component={DCourses} />
+          <Route path="/Dusers" Component={DUsers} />
           <Route path="/Performance" Component={Performance} />
 
-          {/* Error */}
-          <Route path="*" Component={ErrorPage}></Route>
+          {/* =======================
+              ERROR PAGE
+          ======================== */}
+          <Route path="*" Component={ErrorPage} />
 
         </Routes>
       </BrowserRouter>
