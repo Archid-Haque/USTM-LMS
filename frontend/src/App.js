@@ -32,6 +32,12 @@ import SettingsPage from './pages/admin/SettingsPage';
 // Teacher Pages
 // =======================
 import TeacherDashboard from './pages/teacher/TeacherDashboard';
+import TeacherCourses from './pages/teacher/TeacherCourses';
+import TeacherAssignments from './pages/teacher/TeacherAssignments';
+import TeacherAttendance from './pages/teacher/TeacherAttendance';
+import TeacherAnnouncements from './pages/teacher/TeacherAnnouncements';
+import TeacherAnalytics from './pages/teacher/TeacherAnalytics';
+import TeacherProfile from './pages/teacher/TeacherProfile';
 
 function App() {
   return (
@@ -57,6 +63,12 @@ function App() {
               TEACHER ROUTES
           ======================== */}
           <Route path="/teacher" element={<TeacherDashboard />} />
+          <Route path="/teacher/courses" element={<TeacherCourses />} />
+          <Route path="/teacher/assignments" element={<TeacherAssignments />} />
+          <Route path="/teacher/attendance" element={<TeacherAttendance />} />
+          <Route path="/teacher/announcements" element={<TeacherAnnouncements />} />
+          <Route path="/teacher/analytics" element={<TeacherAnalytics />} />
+          <Route path="/teacher/profile" element={<TeacherProfile />} />
 
           {/* =======================
               AUTHENTICATION
