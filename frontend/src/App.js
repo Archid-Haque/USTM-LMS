@@ -28,6 +28,11 @@ import AssignmentsPage from './pages/admin/AssignmentsPage';
 import ReportsPage from './pages/admin/ReportsPage';
 import SettingsPage from './pages/admin/SettingsPage';
 
+// =======================
+// Teacher Pages
+// =======================
+import TeacherDashboard from './pages/teacher/TeacherDashboard';
+
 function App() {
   return (
     <div className="App">
@@ -47,6 +52,11 @@ function App() {
           <Route path="/admin/assignments" element={<AssignmentsPage />} />
           <Route path="/admin/reports" element={<ReportsPage />} />
           <Route path="/admin/settings" element={<SettingsPage />} />
+
+          {/* =======================
+              TEACHER ROUTES
+          ======================== */}
+          <Route path="/teacher" element={<TeacherDashboard />} />
 
           {/* =======================
               AUTHENTICATION
